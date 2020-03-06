@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono|VT323&display=swap');
+
+* {
+    --base: #2f3945;
+    --black: #222;
+    --blue: #3466af;
+    --darkgrey: #444;
+	--github: #24292e;
+    --grey: #414f5b;
+	--hoverLink: #f55;
+    --layout: #e6e6e6;
+	--linkedin: #0e76a8;
+    --white: #fff;
+    --yellow: #ffcb05;
+}
+
+body {
+    background-color: var(--base);
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    color: var(--white);
+    text-shadow: 1px 2px 5px var(--black);
+    font-size: 3em;
+    font-family: 'VT323', monospace;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.layout {
+    align-items: flex-start;
+    background-color: var(--layout);
+    border: 1px solid;
+    border-color: #c0c0c0 var(--black) var(--black) #c0c0c0;
+    border-radius: 10px;
+    box-shadow: 1px 2px 5px var(--black);
+    display: grid;
+    height: 500px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-gap: 10px;
+    justify-items: center;
+    margin: 20px auto;
+    padding: 15px;
+    width: 360px;
+}
+.items {
+    align-items: center;
+    background-image: linear-gradient(var(--white),var(--layout));
+    border: 1px solid;
+    border-color: #c0c0c0 #7491a5 #7491a5 #c0c0c0;
+    border-radius: 5px;
+    color: var(--grey);
+    cursor: pointer;
+    display: flex;
+    font-size: 1.5em;
+    font-weight: 700;
+    height: 100%;
+    justify-content: center;
+    transition: background-color .3s;
+    width: 100%;
+}
+.items:hover {
+    background-image: none;
+    background-color: white;
+    border-color: #c0c0c0 #7491a5 #7491a5 #c0c0c0;
+    color: var(--grey);
+    transition: background-color .3s;
+}
+.items:active {
+    transform: scale(0.97);
+}
+.operator {
+    background-image: linear-gradient(#eee,#ccc);
+    border-color: #bbb #7491a5 #7491a5 #bbb;
+}
+.mainoperator {
+    background-image: linear-gradient(var(--grey),var(--base));
+    border-color: var(--grey) var(--black) var(--black) var(--grey);
+    color: var(--white);
+}
+/********** FIRST ROW *********/
+.terminal {
+    align-items: flex-end;
+    background-color: var(--white);
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    color: var(--github);
+    display: flex;
+    flex-direction: column;
+    font-family: monospace;
+    font-size: 2em;
+    grid-column: 1/5;
+    justify-content: space-around;
+    height: 63px;
+    overflow: hidden;
+    padding: 10px;
+    width: 100%;
+}
+.upperlog {
+    color: #777;
+    font-size: 0.6em;
+}
+
+/********** SECOND ROW *********/
+.backspace, .sign, .reset, .point {
+    grid-row: 2/3;
+}
+.backspace {
+    grid-column: 1/2;
+}
+.sign {
+    grid-column: 2/3;
+}
+.point {
+    grid-column: 3/4;
+}
+.reset {
+    grid-column: 4/5;
+}
+/********** THIRD ROW ******123456789101112
+.num7 {
+    grid-column: 1/2;
+
+}
+.num8 {
+    grid-column: 2/3;
+}
+.num9 {
+    grid-column: 3/4;
+}
+.div {
+    grid-column: 4/5;
+}
+/********** FOURTH ROW *********/
+.num4, .num5, .num6, .prod {
+    grid-row: 4/5;
+}
+.num4 {
+    grid-column: 1/2;
+}
+.num5 {
+    grid-column: 2/3;
+}
+.num6 {
+    grid-column: 3/4;
+}
+.prod {
+    grid-column: 4/5;
+}
+/********** FIFTH ROW *********/
+.num1, .num2, .num3, .subs {
+    grid-row: 5/6;
+}
+.num1 {
+    grid-column: 1/2;
+}
+.num2 {
+    grid-column: 2/3;
+}
+.num3 {
+    grid-column: 3/4;
+}
+.subs {
+    grid-column: 4/5;
+}
+/********** SIXTH ROW *********/
+.num0, .equal, .sum {
+    grid-row: 6/7;
+}
+.num0 {
+    grid-column: 1/2;
+}
+.sum {
+    grid-column: 4/5;
+}
+.equal {
+    grid-column: 2/4;
+}
+
+/********** FOOTER *********/
+.footer {
+	background-color: var(--layout);
+	border-top: 5px solid var(--grey);
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: max-content;
+	justify-content: center;
+    margin-top: auto;
+    width: 100%;
+}
+@media (max-width:630px) {
+	.footer {
+		grid-template-columns: 1fr;
+	}
+}
+.footer__item {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	padding: 1rem;
+	width: 100%;
+}
+.footer__item:nth-child(3) {
+	justify-self: center;
+	max-width: 300px;
+}
+.footer__logo {
+	height: 40px;
+	padding-right: 0.3rem;
+}
+.fab, .fas {
+	font-size: 2.5em;
+	padding: 5px;
+}
+.fa-linkedin {
+	color: var(--linkedin);
+}
+.fa-github-square {
+	color: var(--github);
+}
+.fa-envelope-square {
+	color: var(--darkgrey);
+}
+.fa-linkedin:hover, .fa-github-square:hover, .fa-envelope-square:hover {
+	color: var(--hoverLink);
+	transition: 0.3s;
+}
+.madeby {
+	max-width: 150px;
+	padding: 10px;
+}
+.nintendorights {
+	color: var(--darkgrey);
+	font-size: 0.8em;
+	font-weight: bolder;
+	text-align: center;
+}
+.playerMove {
+	transition: 3s;
+}
