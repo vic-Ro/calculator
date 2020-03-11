@@ -1,27 +1,36 @@
-/******* CLASS CALCULATOR *******/
+const numberButton = document.querySelectorAll('[data-number]');
+const operatorButton = document.querySelectorAll('[data-operator]');
+const clearButton = document.querySelector('[data-clear]');
+const deleteButton = document.querySelector('[data-delete]');
+const equalsButton = document.querySelector('[data-equals]');
+const changeSignButton = document.querySelector('[data-sign]');
+const upperLog = document.querySelector('[data-upperlog]');
+const mainLog = document.querySelector('[data-mainlog]');
+
 class Calculator {
-    constructor (previousOperandTextElement,currentOperandTextElement) {
-        this.previousOperandTextElement = previousOperandTextElement;
-        this.currentOperandTextElement = currentOperandTextElement;
-        this.clear()
+    constructor (upperOperand, mainOperand) {
+        this.currentOperandDisplay = mainOperand;
+        this.previousOperandDisplay = upperOperand;
+        this.clearAll()
     }
-/******* METHODS *******/
-    clear() {
+    clearAll() {
         this.currentOperand = '';
         this.previousOperand = '';
-        this.operation = undefined;
-        this.equals = false;
+        this.operation = '';
+        this.equalized = false;
     }
-    delete() {
-        this.currentOperand = this.currentOperand.toString().slice(0, -1);
+    appendNumber(number){
+        if (number === '.' && this.currentOperand.toString().includes('.')) return
+        if (this.equalized === true) this.clearAll();
+        this.currentOperand = this.currentOperand.toString() + number.toString()
+        this.equalized = false;
     }
-    appendNumber(number) {
-        if (number === '.' && this.currentOperand.toString().includes('.')) return;
-        if (this.equals === true && this.currentOperand!=='') {
-             this.clear();
-        }
-        this.currentOperand = this.currentOperand.toString() + number.toString();
-        this.equals = false;
+    deleteNumber() {
+        this.currentOperand = this.currentOperand.toString().slice(0,-1)
+    }
+    changeSign() {
+        if (this.currentOperand==='.') return;
+        this.currentOperand *= -1;
     }
     chooseOperation(operation) {
         if (this.currentOperand === '') return;
@@ -29,102 +38,112 @@ class Calculator {
         this.operation = operation;
         this.previousOperand = this.currentOperand;
         this.currentOperand = '';
+        this.equalized = false;
     }
-    compute() {
-        let computation;
-        const prev = parseFloat(this.previousOperand);
-        const current = parseFloat(this.currentOperand);
-        if (isNaN(prev) || isNaN(current)) return;
+    compute(){
+        let prev = parseFloat(this.previousOperand);
+        let curr = parseFloat(this.currentOperand);
+        if (isNaN(prev) || isNaN(curr)) return
+        let computation
         switch (this.operation) {
             case '+':
-                computation = prev + current;
+                computation = prev + curr;
                 break;
             case '-':
-                computation = prev - current;
+                computation = prev - curr;
                 break;
             case '*':
-                computation = prev * current;
+                computation = prev * curr;
                 break;
             case '/':
-                computation = prev / current;
+                computation = prev / curr;
                 break;
-            default:
-                return
         }
         this.currentOperand = computation;
         this.operation = undefined;
         this.previousOperand = '';
     }
-    changeSign () {
-        this.currentOperand*=-1;
-    }
-    getDisplayNumber(number) {
-        const integerDigits = parseFloat(number.toString().split('.')[0]);
-        const decimalDigits = number.toString().split('.')[1];
+    roundNumber(number) {
+        const stringNumber = number.toString();
+        const integer = parseFloat(stringNumber.split('.')[0]);
+        const decimal = stringNumber.split('.')[1];
         let integerDisplay;
-        if(isNaN(integerDigits)) {
-            integerDisplay = '';
-        } else {
-            integerDisplay = integerDigits.toLocaleString('en', {maximumFractionDigits:0});
-        }
-        if (decimalDigits!= null) {
-            return `${integerDisplay}.${decimalDigits}`;
-        } else {
-            return `${integerDisplay}`;
-        }
-
+        isNaN(integer) ? integerDisplay = '' : integerDisplay = integer.toLocaleString('en');
+        if (decimal != null) return `${integerDisplay}.${decimal.slice(0,10)}`;
+        else return integerDisplay;
     }
-    updateDisplay() {
-        this.currentOperandTextElement.textContent =  this.getDisplayNumber(this.currentOperand);
-        if(this.operation!= null) {
-            return this.previousOperandTextElement.textContent = `${ this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+    updateDisplay(){
+        this.currentOperandDisplay.textContent = this.roundNumber(this.currentOperand);
+        if (this.operation === undefined) {
+            this.previousOperandDisplay.textContent = this.roundNumber(this.previousOperand);
         } else {
-            this.previousOperandTextElement.textContent =  this.getDisplayNumber(this.previousOperand);
+            this.previousOperandDisplay.textContent = `${this.roundNumber(this.previousOperand)} ${this.operation.toString()}`;
         }
     }
 }
-/******* VARIABLES *******/
-const numButtons = document.querySelectorAll('[data-number]');
-const opButtons = document.querySelectorAll('[data-operator]');
-const equalButton = document.querySelector('[data-equals]');
-const deleteButton = document.querySelector('[data-delete]');
-const clearButton = document.querySelector('[data-clear]');
-const changSignButton = document.querySelector('[data-sign]');
-const previousOperandTextElement = document.querySelector('[data-prev-operand]');
-const currentOperandTextElement = document.querySelector('[data-curr-operand]');
-
-/******* CALCULATOR OBJECT *******/
-
-const calculator = new Calculator (previousOperandTextElement, currentOperandTextElement)
-
-/******* EVENT LISTENERS *******/
-
-numButtons.forEach(button => {
+const calculator = new Calculator(upperLog, mainLog);
+numberButton.forEach((button)=>{
     button.addEventListener('click', () => {
         calculator.appendNumber(button.textContent);
         calculator.updateDisplay();
-    });
+    })
 });
-opButtons.forEach(button => {
+operatorButton.forEach((button)=>{
     button.addEventListener('click', () => {
         calculator.chooseOperation(button.textContent);
         calculator.updateDisplay();
-    });
+    })
 });
-equalButton.addEventListener('click', (button) => {
+clearButton.addEventListener('click', () => {
+        calculator.clearAll();
+        calculator.updateDisplay();
+});
+equalsButton.addEventListener('click', () => {
         calculator.compute();
         calculator.updateDisplay();
-        calculator.equals = true;
+        calculator.equalized = true;
 });
-clearButton.addEventListener('click', (button) => {
-        calculator.clear();
-        calculator.updateDisplay();
-});
-deleteButton.addEventListener('click', (button) => {
-        calculator.delete();
-        calculator.updateDisplay();
-});
-changSignButton.addEventListener('click', (button) => {
+changeSignButton.addEventListener('click', () => {
         calculator.changeSign();
         calculator.updateDisplay();
 });
+deleteButton.addEventListener('click', () => {
+        calculator.deleteNumber();
+        calculator.updateDisplay();
+});
+window.addEventListener('keydown', (key)=> {
+    switch (key.key) {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '.':
+            calculator.appendNumber(key.key);
+            calculator.updateDisplay();
+            break;
+        case '*':
+        case '/':
+        case '-':
+        case '+':
+            calculator.chooseOperation(key.key);
+            calculator.updateDisplay();
+            break;
+        case 'Enter':
+            calculator.compute();
+            calculator.updateDisplay();
+            calculator.equalized = true;
+            break;
+        case 'Backspace':
+            calculator.deleteNumber();
+            calculator.updateDisplay();
+            break;
+        default:
+            break;
+    }
+})
